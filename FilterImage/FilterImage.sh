@@ -48,6 +48,12 @@ typeMap["douyin"]="^[[:alnum:]]{32}(tmp)?\."
 typeMap["VIDs"]="^VID_[[:digit:]]{8}_[[:digit:]]{6}"
 # 相册
 typeMap["cameras"]="^IMG_[[:digit:]]{8}_[[:digit:]]{6}"
+# 淘宝
+typeMap["taobao"]="^-?[[:digit:]]{9,10}\."
+# 京东
+typeMap["jd"]="^JDIM_[[:digit:]]{13}"
+# 简单名称 例：一些表情（11.gif）
+typeMap["simple"]="^[[:alnum:]]{1,4}\."
 
 
 # 开始分类
@@ -72,14 +78,14 @@ function moveToDir() {
 	# 判断是否有重命名文件 例：aaa(1).png
 	if [ $typeBackupCount -gt 0 ]; then
 		mkdir -p ${1}/bak
-		ls | egrep ${typeMap[${1}]} | egrep '\([[:digit:]]+\)' | xargs -d '\n' mv -t ${1}/bak
+		ls | egrep ${typeMap[${1}]} | egrep '\([[:digit:]]+\)' | xargs -d '\n' mv -t ${1}/bak --
 	else
 		mkdir ${1}
 	fi
 
 	# 如果还存在文件
 	if [ $(expr $typeFileCount - $typeBackupCount) -gt 0 ]; then 
-		ls | egrep ${typeMap[${1}]} | xargs -d '\n' mv -t ${1}
+		ls | egrep ${typeMap[${1}]} | xargs -d '\n' mv -t ${1} --
 	fi
 
 
@@ -95,7 +101,7 @@ if [ $otherTypeCount -gt 0 ]; then
 	if [ ! -d NotImage ]; then
 		mkdir NotImage
 	fi
-	ls | egrep -v $ImgSuffix | xargs -d '\n' mv -t NotImage
+	ls | egrep -v $ImgSuffix | xargs -d '\n' mv -t NotImage --
 fi
 
 # 开始遍历已知图片类型
